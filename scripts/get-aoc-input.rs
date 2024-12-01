@@ -9,6 +9,12 @@ reqwest = { version = "0.11.22", features=["blocking"] }
 openssl = { version = "0.10", features = ["vendored"] }
 ---
 
+//! Script to get the input for an advent of code day
+//! taken from the session token in the environment.
+//! 
+//! This code is taken from
+//! [ChristopherBiscardi](https://github.com/ChristopherBiscardi/advent-of-code/blob/bc5ad528576194355f2fb1b6a03091d8bcd69f76/2024/rust/scripts/get-aoc-input.rs)
+
 use clap::{error::ErrorKind, CommandFactory, Parser};
 use nom::{
     bytes::complete::tag, character::complete,
