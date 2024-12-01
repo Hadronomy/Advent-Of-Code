@@ -10,3 +10,6 @@
 [tasks.default]
 description = "Run bacon"
 run = ["bacon"]
+
+[env]
+_.file = ".env.local"

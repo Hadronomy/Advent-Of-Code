@@ -24,3 +24,4 @@ create year day:
     fi
     @cd {{source_directory()}}/{{year}}; \
     cargo generate --path {{source_directory()}}/daily-template --name day-{{day}} --define year={{year}} --define day={{day}}
+    {{source_directory()}}/scripts/get-aoc-input.rs --year {{year}} --day day-{{day}} -c {{source_directory()}}
