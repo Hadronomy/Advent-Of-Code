@@ -14,6 +14,9 @@ test year day:
 run year day part:
     cargo run --locked -p aoc{{year}}-day-{{day}} --bin part{{part}} 
 
+bench year day:
+    cargo bench --locked -p aoc{{year}}-day-{{day}}
+
 [no-cd]
 create year day:
     @if [ ! -d {{source_directory()}}/{{year}} ]; then \
