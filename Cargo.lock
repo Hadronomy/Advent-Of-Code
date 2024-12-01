@@ -86,7 +86,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "aoc2024-day-6"
+name = "aoc2023-day-6"
 version = "0.1.0"
 dependencies = [
  "indicatif",
@@ -94,6 +94,19 @@ dependencies = [
  "miette",
  "nom",
  "nom-supreme",
+ "rayon",
+ "rstest",
+ "tracing",
+]
+
+[[package]]
+name = "aoc2024-day-1"
+version = "0.1.0"
+dependencies = [
+ "indicatif",
+ "itertools",
+ "miette",
+ "nom",
  "rayon",
  "rstest",
  "tracing",
