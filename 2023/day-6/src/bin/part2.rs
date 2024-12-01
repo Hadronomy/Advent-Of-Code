@@ -1,4 +1,4 @@
-use day_6::part2;
+use aoc2024_day_6::part2;
 
 fn main() {
     let input = include_str!("input.txt");

@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use indicatif::{ParallelProgressIterator, ProgressIterator};
+use indicatif::ParallelProgressIterator;
 use nom::{
     bytes::complete::{tag, take_until},
     character::complete::{self, line_ending, space1},
@@ -69,7 +69,7 @@ pub fn process(input: &str) -> miette::Result<u64> {
     let (_, (seeds, maps)) = parse_seedmaps(input).expect("a valid parse");
     let locations = seeds
         .iter()
-        .flat_map(|range| range.clone().into_iter())
+        .flat_map(|range| range.clone())
         .collect::<Vec<u64>>();
     let locations = locations
         .into_par_iter()
@@ -84,7 +84,7 @@ pub fn process(input: &str) -> miette::Result<u64> {
 mod tests {
     use super::*;
 
-    use rstest::rstest;
+    
 
     #[test]
     fn it_works() -> miette::Result<()> {

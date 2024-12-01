@@ -1,5 +1,5 @@
 [package]
-name = "day-3"
+name = "aoc2023-day-3"
 authors = ["Pablo Hernandez (@Hadronomy)"]
 version = "0.1.0"
 edition = "2021"

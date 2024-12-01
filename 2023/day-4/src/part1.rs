@@ -67,8 +67,6 @@ pub fn process(input: &str) -> miette::Result<u32> {
 mod tests {
     use super::*;
 
-    use rstest::rstest;
-
     #[test]
     fn it_works() -> miette::Result<()> {
         let input = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53

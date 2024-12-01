@@ -16,13 +16,6 @@ struct Card {
 }
 
 impl Card {
-    fn score(&self) -> u32 {
-        match self.num_matches().checked_sub(1) {
-            Some(num) => 2u32.pow(num as u32),
-            None => 0,
-        }
-    }
-
     fn num_matches(&self) -> usize {
         self.winning_numbers.intersection(&self.my_numbers).count()
     }
@@ -87,8 +80,6 @@ pub fn process(input: &str) -> miette::Result<u32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    use rstest::rstest;
 
     #[test]
     fn it_works() -> miette::Result<()> {

@@ -39,7 +39,7 @@ pub fn process(input: &str) -> miette::Result<usize> {
 mod tests {
     use super::*;
 
-    use rstest::rstest;
+    
 
     #[test]
     fn it_works() -> miette::Result<()> {

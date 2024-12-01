@@ -1,12 +1,44 @@
-<html>
-  <h1 align=center>Advent Of Code</h1>
-  <p align=center>Advent of Code & Experiments</p>
-  <div align=center>  
-    <img title="The author of the repo" alt="there's a cat writing code" src=".github/silly-pc-cat.jpg">
-  </div>
-</html>
+<div align="center">
+  <img src="/.github/images/github-header-image.webp" alt="GitHub Header Image" width="auto" />
+  
+  <!-- MIT License -->
+  <a href="https://github.com/hadronomy/advent-of-code/blob/main/LICENSE">
+    <img
+      alt="Content License"
+      src="https://img.shields.io/github/license/hadronomy/advent-of-code?style=for-the-badge&logo=starship&color=ee999f&logoColor=D9E0EE&labelColor=302D41"
+    />
+  </a>
+
+  <!-- GitHub Repo Stars -->
+  <a href="https://github.com/hadronomy/advent-of-code/stargazers">
+    <img
+      alt="Stars"
+      src="https://img.shields.io/github/stars/hadronomy/advent-of-code?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41"
+    />
+  </a>
+  <p></p>
+  <span>
+    A simple cli tool to copy everything directly from the terminal.
+  </span>
+  <p></p>
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#license">License</a>
+  <hr />
+
+</div>
 
 
+</div>
+
+## Installation
+
+<!-- TODO -->
+
+## Usage
+
+<!-- TODO -->
 
 ## License
-This project is licensed under the [MIT License](LICENSE)
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) for details.

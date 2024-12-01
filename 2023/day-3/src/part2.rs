@@ -98,8 +98,6 @@ pub fn process(input: &str) -> miette::Result<i32> {
 mod tests {
     use super::*;
 
-    use rstest::rstest;
-
     #[test]
     fn it_works() -> miette::Result<()> {
         let input = "467..114..

@@ -37,20 +37,9 @@ impl Cube {
 #[derive(Debug)]
 struct Game {
     rounds: Vec<Vec<Cube>>,
-    id: u32,
 }
 
 impl Game {
-    fn is_valid(&self) -> bool {
-        self.rounds.iter().all(|round| {
-            round.iter().all(|cube| match cube {
-                Cube::Red(count) => *count <= 12,
-                Cube::Green(count) => *count <= 13,
-                Cube::Blue(count) => *count <= 14,
-            })
-        })
-    }
-
     fn fewest_possible_power(&self) -> u32 {
         let map = BTreeMap::from([("red", 0), ("green", 0), ("blue", 0)]);
         self.rounds
@@ -88,9 +77,9 @@ fn round_parser(input: &str) -> IResult<&str, Vec<Cube>> {
 }
 
 fn game_parser(input: &str) -> IResult<&str, Game> {
-    let (input, id) = preceded(tag("Game "), complete::u32)(input)?;
+    let (input, _id) = preceded(tag("Game "), complete::u32)(input)?;
     let (input, rounds) = preceded(tag(": "), separated_list1(tag("; "), round_parser))(input)?;
-    Ok((input, Game { rounds, id }))
+    Ok((input, Game { rounds }))
 }
 
 fn parse_games(input: &str) -> IResult<&str, Vec<Game>> {
@@ -112,8 +101,6 @@ pub fn process(input: &str) -> miette::Result<u32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    use rstest::rstest;
 
     #[test]
     fn it_works() -> miette::Result<()> {
