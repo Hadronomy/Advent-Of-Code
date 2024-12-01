@@ -13,8 +13,8 @@ test day:
 
 [no-cd]
 create year day:
-    if [ ! -d {{source_directory()}}/{{year}} ]; then \
+    @if [ ! -d {{source_directory()}}/{{year}} ]; then \
         mkdir {{source_directory()}}/{{year}}; \
     fi
-    cd {{source_directory()}}/{{year}}; \
+    @cd {{source_directory()}}/{{year}}; \
     cargo generate --path {{source_directory()}}/daily-template --name day-{{day}} --define year={{year}} --define day={{day}}
