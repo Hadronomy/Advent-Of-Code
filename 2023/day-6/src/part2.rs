@@ -36,8 +36,6 @@ pub fn process(input: &str) -> miette::Result<usize> {
 mod tests {
     use super::*;
 
-    
-
     #[test]
     fn it_works() -> miette::Result<()> {
         let input = "Time:      7  15   30

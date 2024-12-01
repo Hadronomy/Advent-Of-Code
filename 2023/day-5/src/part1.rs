@@ -72,8 +72,6 @@ pub fn process(input: &str) -> miette::Result<u64> {
 mod tests {
     use super::*;
 
-    
-
     #[test]
     fn it_works() -> miette::Result<()> {
         let input = "seeds: 79 14 55 13
