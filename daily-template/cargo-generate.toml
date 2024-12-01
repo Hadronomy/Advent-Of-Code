@@ -1,0 +1,6 @@
+[placeholders]
+year = { type = "string", prompt = "Enter the year" }
+day = { type = "string", prompt = "Enter the day" }
+
+[hooks]
+pre = ["scripts/pre_set_project_name.rhai"]
