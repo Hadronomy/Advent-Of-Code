@@ -12,7 +12,7 @@ use crate::parser::*;
 /// let b: u32 = 4;
 /// let result = distance(a, b);
 /// ```
-fn distance(a: u32, b: u32) -> u32 {
+fn distance(a: &u32, b: &u32) -> u32 {
     if a > b {
         a - b
     } else {
@@ -37,7 +37,7 @@ pub fn process(input: &str) -> Result<String> {
         .par_iter()
         .progress()
         .zip(vectors.1.par_iter())
-        .map(|(a, b)| distance(*a, *b))
+        .map(|(a, b)| distance(a, b))
         .sum::<u32>();
 
     Ok(result.to_string())
