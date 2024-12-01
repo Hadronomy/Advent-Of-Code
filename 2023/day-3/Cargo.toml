@@ -1,0 +1,14 @@
+[package]
+name = "aoc2023-day-3"
+authors = ["Pablo Hernandez (@Hadronomy)"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+glam = { workspace = true }
+itertools = { workspace = true}
+miette = { workspace = true, features = ["fancy"] }
+nom = { workspace = true }
+nom_locate = { workspace = true }
+rstest = { workspace = true }
+tracing = { workspace = true }

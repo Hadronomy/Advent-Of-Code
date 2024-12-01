@@ -1,0 +1,5 @@
+[hooks]
+pre-commit = "cargo clippy --locked"
+
+[logging]
+verbose = true
