@@ -4,3 +4,6 @@ day = { type = "string", prompt = "Enter the day" }
 
 [hooks]
 pre = ["scripts/pre_set_project_name.rhai"]
+
+[template]
+ignore = ["scripts"]
