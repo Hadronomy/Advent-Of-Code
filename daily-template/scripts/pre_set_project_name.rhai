@@ -1,6 +1,6 @@
 fn set_project_name(year, day) {
     let project_name = "day-" + day;
-    let crate_name = "aoc" + year + "-day-" + day;
+    let crate_name = "aoc" + year + "_day_" + day;
     variable::set("project-name", project_name);
     variable::set("crate_name", crate_name);
 }

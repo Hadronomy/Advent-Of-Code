@@ -1,5 +1,5 @@
 [package]
-name = "{{crate_name}}"
+name = "{{crate_name | kebab_case}}"
 authors = ["Pablo Hernandez (@Hadronomy)"]
 version = "0.1.0"
 edition = "2021"
