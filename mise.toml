@@ -5,6 +5,7 @@
 "cargo:bacon" = "latest"
 "cargo:cargo-machete" = "latest"
 "cargo:cargo-generate" = "latest"
+"cargo:just" = "latest"
 
 [tasks.default]
 description = "Run bacon"
