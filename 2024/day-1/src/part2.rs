@@ -3,7 +3,6 @@ use std::vec;
 
 use miette::*;
 use rayon::prelude::*;
-use indicatif::ParallelProgressIterator;
 
 use crate::parser::*;
 
@@ -19,7 +18,6 @@ pub fn process(input: &str) -> Result<String> {
     let number_occurences = vectors
         .1
         .par_iter()
-        .progress()
         .fold(HashMap::new, |mut acc, b| {
             let counter = acc.entry(b).or_insert(0);
             *counter += 1;
@@ -35,7 +33,6 @@ pub fn process(input: &str) -> Result<String> {
     let result = vectors
         .0
         .par_iter()
-        .progress()
         .zip(vectors.1.par_iter())
         .map(|(a, _)| a * number_occurences.get(a).unwrap_or(&0))
         .sum::<u32>();

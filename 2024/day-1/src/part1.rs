@@ -1,6 +1,5 @@
 use std::vec;
 
-use indicatif::ParallelProgressIterator;
 use miette::*;
 use rayon::prelude::*;
 
@@ -35,7 +34,6 @@ pub fn process(input: &str) -> Result<String> {
     let result = vectors
         .0
         .par_iter()
-        .progress()
         .zip(vectors.1.par_iter())
         .map(|(a, b)| distance(a, b))
         .sum::<u32>();

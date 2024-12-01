@@ -16,6 +16,7 @@ tracy-client = "0.17.4"
 tracy-client-sys = "0.24.2"
 rayon = "1.10.0"
 indicatif = { version = "0.17.9", features = ["rayon"] }
+divan = "0.1.16"
 
 [profile.release]
 debug = 1
