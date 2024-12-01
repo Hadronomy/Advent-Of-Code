@@ -1,4 +1,4 @@
-use aoc2024_day_1::*;
+use {{crate_name}}::*;
 
 fn main() {
     divan::main();
