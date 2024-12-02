@@ -142,8 +142,15 @@ def get_aoc_input(
                 if end_time and datetime.now() >= end_time:
                     log.error("Timeout exceeded. Please try again later.")
                     exit(1)
-                log.warning("Input not ready (404). Retrying in 3 seconds...")
-                sleep(3)
+                if end_time:
+                    remaining_time = (end_time - datetime.now()).total_seconds()
+                    sleep_time = min(3, remaining_time)
+                    if sleep_time > 0:
+                        log.warning("Input not ready (404). Retrying in 3 seconds...")
+                    sleep(sleep_time)
+                else:
+                    log.warning("Input not ready (404). Retrying in 3 seconds...")
+                    sleep(3)
             else:
                 raise e
 
