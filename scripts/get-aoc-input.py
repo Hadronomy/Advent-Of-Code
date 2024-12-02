@@ -120,7 +120,7 @@ def get_aoc_input(
     day_number = day.split("-")[1]
 
     url = f"https://adventofcode.com/{year}/day/{day_number}/input"
-    log.info(f"sending to `{url}`")
+    log.info(f"Sending to `{url}`")
 
     headers = {"Cookie": f"session={session}"}
 
