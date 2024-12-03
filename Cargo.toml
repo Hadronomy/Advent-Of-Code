@@ -21,8 +21,8 @@ divan = "0.1.16"
 [profile.release]
 debug = 1
 incremental = true
-# This is set to true in CI
-lto = false
+opt-level = 3
+lto = true
 
 [profile.dev.package.backtrace]
 opt-level = 3
