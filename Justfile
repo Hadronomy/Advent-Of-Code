@@ -24,7 +24,7 @@ create year day:
     fi
     @cd {{source_directory()}}/{{year}}; \
     cargo generate --path {{source_directory()}}/daily-template --name day-{{day}} --define year={{year}} --define day={{day}}
-    @if ! {{source_directory()}}/scripts/get-aoc-input.py {{year}} day-{{day}} --cwd {{source_directory()}} --timeout 3; then \
+    @if ! {{source_directory()}}/scripts/get-aoc-input.py {{year}} day-{{day}} --cwd {{source_directory()}} --timeout 60; then \
         echo "Failed to get input for day-{{day}} of year {{year}}"; \
         echo "Cleaning up..."; \
         rm -rf {{source_directory()}}/{{year}}/day-{{day}}; \
