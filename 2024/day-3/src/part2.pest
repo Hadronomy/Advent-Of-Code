@@ -1,0 +1,10 @@
+WHITESPACE = _{ " " | "\t" | "\n" }
+
+input = { (do_instruction | dont_instruction | mul_instruction | text)* }
+
+do_instruction   = { "do()" }
+dont_instruction = { "don't()" }
+mul_instruction  = { "mul(" ~ number ~ "," ~ number ~ ")" }
+
+number = @{ ASCII_DIGIT+ }
+text   =  { (!("do()" | "don't()" | mul_instruction) ~ ANY)+ }
