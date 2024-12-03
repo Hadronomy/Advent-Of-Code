@@ -1,5 +1,7 @@
+use miette::*;
+
 #[tracing::instrument]
-pub fn process(input: &str) -> miette::Result<String> {
+pub fn process(input: &str) -> Result<String> {
     Ok(String::from(""))
 }
 
@@ -10,7 +12,7 @@ mod tests {
     use rstest::rstest;
 
     #[test]
-    fn it_works() -> miette::Result<()> {
+    fn it_works() -> Result<()> {
         let input = "";
         assert_eq!("example", process(input)?);
         Ok(())

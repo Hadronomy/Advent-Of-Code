@@ -1,8 +1,11 @@
+use miette::*;
+
 use {{crate_name}}::part2;
 
-fn main() {
+fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     let input = include_str!("../../input2.txt");
-    let result = part2::process(input);
-    println!("Result: {}", result.expect("should have a result"));
+    let result = part2::process(input)?;
+    println!("Result: {}", result);
+    Ok(())
 }
