@@ -20,8 +20,7 @@ pub fn process(input: &str) -> Result<String> {
     let result = vectors
         .0
         .par_iter()
-        .zip(vectors.1.par_iter())
-        .map(|(a, _)| a * *number_occurences.get(a).unwrap_or(&0) as u32)
+        .map(|a| a * *number_occurences.get(a).unwrap_or(&0) as u32)
         .sum::<u32>();
 
     Ok(result.to_string())
