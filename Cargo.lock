@@ -109,6 +109,7 @@ dependencies = [
 name = "aoc2024-day-1"
 version = "0.1.0"
 dependencies = [
+ "counter",
  "divan",
  "indicatif",
  "itertools",
@@ -288,6 +289,15 @@ dependencies = [
  "libc",
  "unicode-width 0.1.14",
  "windows-sys 0.45.0",
+]
+
+[[package]]
+name = "counter"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f009fcafa949dc1fc46a762dae84d0c2687d3b550906b633c4979d58d2c6ae52"
+dependencies = [
+ "num-traits",
 ]
 
 [[package]]
