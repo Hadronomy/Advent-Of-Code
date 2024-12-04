@@ -167,10 +167,23 @@ def get_aoc_input(
     response = requests.get(problem_url, headers=headers)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "html.parser")
-    problem_description = soup.find("article", class_="day-desc")
-    if problem_description:
-        problem_description_html = problem_description.prettify()
-        problem_description_md = md(problem_description_html, escape_misc=True)
+    problem_descriptions = soup.find_all("article", class_="day-desc")
+
+    problem_description_md = ""
+    if problem_descriptions:
+        title = soup.find("h2").text.strip()
+        soup.find("h2").decompose()
+        problem_description_md += f"# {title}\n\n"
+
+        for i, desc in enumerate(problem_descriptions):
+            part_header = f"## Part {i + 1}\n\n"
+            part_element = soup.find("h2")
+            if part_element:
+                part_element.decompose()
+            problem_description_html = desc.prettify()
+            problem_description_md += (
+                part_header + md(problem_description_html) + "\n\n"
+            )
     else:
         problem_description_md = "Problem description not found."
 
