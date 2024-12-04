@@ -3,7 +3,9 @@
 # dependencies = [
 #   "requests>=2.32.0",
 #   "typer>=0.13.0",
-#   "rich>=13.9.4"
+#   "rich>=13.9.4",
+#   "beautifulsoup4>=4.12.3",
+#   "markdownify>=0.14.1"
 # ]
 # ///
 
@@ -14,10 +16,14 @@ import typer
 from pathlib import Path
 from time import sleep
 from datetime import datetime, timedelta
-from rich.console import Console
-from rich.logging import RichHandler
 import logging
 from enum import Enum
+
+from rich.console import Console
+from rich.logging import RichHandler
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
+
 
 # Set up rich console and logging
 console = Console()
@@ -119,8 +125,9 @@ def get_aoc_input(
 
     day_number = day.split("-")[1]
 
-    url = f"https://adventofcode.com/{year}/day/{day_number}/input"
-    log.debug(f"Sending to `{url}`")
+    problem_url = f"https://adventofcode.com/{year}/day/{day_number}"
+    input_url = f"{problem_url}/input"
+    log.debug(f"Sending to `{input_url}`")
 
     headers = {"Cookie": f"session={session}"}
 
@@ -129,7 +136,7 @@ def get_aoc_input(
     while True:
         try:
             log.info(f"Fetching input files for {year}/{day}")
-            response = requests.get(url, headers=headers)
+            response = requests.get(input_url, headers=headers)
             response.raise_for_status()
             log.info(f"Retrieved input files for {year}/{day}")
             input_data = response.text
@@ -155,6 +162,24 @@ def get_aoc_input(
                     sleep(3)
             else:
                 raise e
+
+    log.info(f"Fetching problem description for {year}/{day}")
+    response = requests.get(problem_url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "html.parser")
+    problem_description = soup.find("article", class_="day-desc")
+    if problem_description:
+        problem_description_html = problem_description.prettify()
+        problem_description_md = md(problem_description_html, escape_misc=True)
+    else:
+        problem_description_md = "Problem description not found."
+
+    readme_path = cwd / year / day / "README.md"
+    readme_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(readme_path, "w") as file:
+        file.write(problem_description_md)
+        log.info(f"Wrote 'README.md' for {year}/{day}")
+        log.debug(f"Wrote {readme_path}")
 
     for filename in ["input1.txt", "input2.txt"]:
         file_path = cwd / year / day / filename
