@@ -159,7 +159,7 @@ def get_aoc_input(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w") as file:
             file.write(input_data)
-            log.info(f"wrote {file_path}")
+            log.info(f"Wrote {file_path}")
 
 
 if __name__ == "__main__":
