@@ -120,7 +120,7 @@ def get_aoc_input(
     day_number = day.split("-")[1]
 
     url = f"https://adventofcode.com/{year}/day/{day_number}/input"
-    log.info(f"Sending to `{url}`")
+    log.debug(f"Sending to `{url}`")
 
     headers = {"Cookie": f"session={session}"}
 
@@ -128,8 +128,10 @@ def get_aoc_input(
 
     while True:
         try:
+            log.info(f"Fetching input files for {year}/{day}")
             response = requests.get(url, headers=headers)
             response.raise_for_status()
+            log.info(f"Retrieved input files for {year}/{day}")
             input_data = response.text
             break
         except requests.exceptions.HTTPError as e:
@@ -159,7 +161,8 @@ def get_aoc_input(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w") as file:
             file.write(input_data)
-            log.info(f"Wrote {file_path}")
+            log.info(f"Wrote '{filename}' for {year}/{day}")
+            log.debug(f"Wrote {file_path}")
 
 
 if __name__ == "__main__":
