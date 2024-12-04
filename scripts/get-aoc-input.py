@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run
 # /// script
 # dependencies = [
-#   "requests<3",
+#   "requests>=2.32.0",
 #   "typer>=0.13.0",
 #   "rich>=13.9.4"
 # ]
