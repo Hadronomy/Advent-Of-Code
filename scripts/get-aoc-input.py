@@ -1,5 +1,6 @@
 #!/usr/bin/env -S uv run
 # /// script
+# requires-python = ">=3.12"
 # dependencies = [
 #   "requests>=2.32.0",
 #   "typer>=0.13.0",
