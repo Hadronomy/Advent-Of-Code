@@ -9,15 +9,62 @@ pub fn process(input: &str) -> Result<String> {
     Ok(total_price.to_string())
 }
 
+#[derive(Clone)]
+pub struct Grid {
+    map: Vec<Vec<char>>,
+    height: isize,
+    width: isize,
+}
+
+impl Grid {
+    pub fn new(input: &[Vec<char>]) -> Self {
+        let height = input.len() as isize;
+        let width = input[0].len() as isize;
+        Self {
+            map: input.to_vec(),
+            height,
+            width,
+        }
+    }
+
+    pub fn get(&self, point: Point) -> Option<char> {
+        if point.x >= 0 && point.x < self.width && point.y >= 0 && point.y < self.height {
+            Some(self.map[point.y as usize][point.x as usize])
+        } else {
+            None
+        }
+    }
+
+    pub fn adjacency(&self, point: Point, plant_type: char) -> Vec<Point> {
+        Direction::iter()
+            .map(|dir| point + dir.into())
+            .filter(|&p| self.get(p) == Some(plant_type))
+            .collect()
+    }
+}
+
+#[derive(EnumIter, Clone, Copy)]
+pub enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-struct Point {
+pub struct Point {
     x: isize,
     y: isize,
 }
 
 impl From<Direction> for Point {
     fn from(dir: Direction) -> Self {
-        dir.to_point()
+        match dir {
+            Direction::Up => Point { x: 0, y: -1 },
+            Direction::Down => Point { x: 0, y: 1 },
+            Direction::Left => Point { x: -1, y: 0 },
+            Direction::Right => Point { x: 1, y: 0 },
+        }
     }
 }
 
@@ -32,64 +79,26 @@ impl std::ops::Add for Point {
     }
 }
 
-#[derive(Clone)]
-struct Grid {
-    map: Vec<Vec<char>>,
-    height: isize,
-    width: isize,
-}
-
-impl Grid {
-    fn new(input: &[Vec<char>]) -> Self {
-        let height = input.len() as isize;
-        let width = input[0].len() as isize;
-        Self {
-            map: input.to_vec(),
-            height,
-            width,
-        }
-    }
-
-    fn get(&self, point: Point) -> Option<char> {
-        if point.x >= 0 && point.x < self.width && point.y >= 0 && point.y < self.height {
-            Some(self.map[point.y as usize][point.x as usize])
-        } else {
-            None
-        }
-    }
-
-    fn adjacency(&self, point: Point, plant_type: char) -> Vec<Point> {
-        Direction::iter()
-            .map(|dir| point + dir.to_point())
-            .filter(|&p| self.get(p) == Some(plant_type))
-            .collect()
-    }
-}
-
-#[derive(EnumIter, Clone, Copy)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
-impl Direction {
-    fn to_point(self) -> Point {
-        match self {
-            Direction::Up => Point { x: 0, y: -1 },
-            Direction::Down => Point { x: 0, y: 1 },
-            Direction::Left => Point { x: -1, y: 0 },
-            Direction::Right => Point { x: 1, y: 0 },
-        }
-    }
-}
-
-fn parse_map(input: &str) -> Vec<Vec<char>> {
+pub fn parse_map(input: &str) -> Vec<Vec<char>> {
     input.lines().map(|line| line.chars().collect()).collect()
 }
 
-fn bfs(grid: &Grid, start: Point, plant_type: char) -> (HashSet<Point>, Vec<Point>) {
+///
+/// Performs a Breadth-First Search (BFS) on the grid starting from the given point and searching for the specified plant type.
+///
+/// # Arguments
+///
+/// * `grid` - A reference to the grid.
+/// * `start` - The starting point for the BFS.
+/// * `plant_type` - The type of plant to search for.
+///
+/// # Returns
+///
+/// A tuple containing:
+/// * A `HashSet` of visited points.
+/// * A `Vec` of points in the region.
+///
+pub fn bfs(grid: &Grid, start: Point, plant_type: char) -> (HashSet<Point>, Vec<Point>) {
     let mut visited = HashSet::new();
     let mut queue = VecDeque::new();
     queue.push_back(start);
@@ -110,7 +119,44 @@ fn bfs(grid: &Grid, start: Point, plant_type: char) -> (HashSet<Point>, Vec<Poin
     (visited, region)
 }
 
-fn calculate_total_price(grid: &Grid) -> usize {
+///
+/// Calculates the total price of all plants in the grid.
+///
+/// # Algorithm
+///
+/// 1. For each cell in the grid:
+///    - 1.1. If the cell has not been visited:
+///        - 1.1.1. Perform a Breadth-First Search ([`bfs`]) starting from the cell and searching for the plant type.
+///               - The [`bfs`] function explores all connected cells of the same plant type starting from the given cell.
+///               - It returns a set of visited points and a vector of points in the region.
+///        - 1.1.2. Calculate the perimeter of the region using the [`bfs`] result.
+///               - For each point in the region, check its neighbors in all directions.
+///               - If a neighbor is not part of the region, it contributes to the perimeter.
+///               - Use a HashMap to count the number of times each perimeter point is encountered.
+///        - 1.1.3. Calculate the area of the region.
+///               - The area is simply the number of points in the region.
+///        - 1.1.4. Calculate the price of the region (area * perimeter).
+///               - Multiply the area by the perimeter to get the price of the region.
+/// 2. Return the total price of all regions.
+///    - Sum the prices of all regions to get the total price.
+///
+/// # Examples
+///
+/// ```
+/// use aoc2024_day_12::part2::{Grid, calculate_total_price};
+///
+/// let grid = Grid::new(&vec![
+///     vec!['A', 'A', 'B', 'B', 'B'],
+///     vec!['A', 'A', 'B', 'C', 'C'],
+///     vec!['D', 'D', 'B', 'C', 'C'],
+///     vec!['D', 'D', 'E', 'E', 'E'],
+///     vec!['F', 'F', 'E', 'G', 'G'],
+/// ]);
+/// let total_price = calculate_total_price(&grid);
+/// assert_eq!(118, total_price);
+/// ```
+///
+pub fn calculate_total_price(grid: &Grid) -> usize {
     let mut visited: HashSet<Point> = HashSet::new();
     let mut total_price = 0;
 
