@@ -183,16 +183,16 @@ pub fn calculate_total_price(grid: &Grid) -> usize {
 
             let mut sides = 0;
             let mut perim_points_set: HashSet<_> = perim_points.keys().cloned().collect();
-            while let Some(&(p, d)) = perim_points_set.iter().next() {
-                perim_points_set.remove(&(p, d));
+            while let Some(&(point, normal)) = perim_points_set.iter().next() {
+                perim_points_set.remove(&(point, normal));
                 sides += 1;
 
-                let mut stack = vec![p];
+                let mut stack = vec![point];
                 while let Some(perimeter_point) = stack.pop() {
                     for direction in Direction::iter().map(|d| d.into()) {
-                        let np = perimeter_point + direction;
-                        if perim_points_set.remove(&(np, d)) {
-                            stack.push(np);
+                        let new_perimeter = perimeter_point + direction;
+                        if perim_points_set.remove(&(new_perimeter, normal)) {
+                            stack.push(new_perimeter);
                         }
                     }
                 }
