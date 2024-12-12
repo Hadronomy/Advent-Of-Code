@@ -210,7 +210,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_process() -> Result<()> {
+    fn it_works() -> Result<()> {
         let input = "RRRRIICCFF
 RRRRIICCCF
 VVRRRCCFFF
