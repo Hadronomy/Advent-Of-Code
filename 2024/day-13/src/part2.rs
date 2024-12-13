@@ -6,7 +6,8 @@ use nom::{
     sequence::{preceded, tuple},
     IResult,
 };
-use z3::{Config, Context, Optimize, SatResult};
+use std::ops::{Add, Mul};
+use z3::{ast::Ast, Config, Context, Optimize, SatResult};
 
 #[derive(Debug)]
 struct ButtonConfig {
@@ -54,7 +55,14 @@ fn parse_claw_machine(input: &str) -> IResult<&str, ClawMachine> {
         multispace1,
         parse_prize,
     ))(input)?;
-    Ok((input, ClawMachine { button_a, button_b, prize }))
+    Ok((
+        input,
+        ClawMachine {
+            button_a,
+            button_b,
+            prize,
+        },
+    ))
 }
 
 fn parse_input(input: &str) -> IResult<&str, Vec<ClawMachine>> {
@@ -70,13 +78,13 @@ fn parse_input(input: &str) -> IResult<&str, Vec<ClawMachine>> {
 
 #[tracing::instrument]
 pub fn process(input: &str) -> Result<String> {
-    let (_, machines) = parse_input(input).map_err(|e| miette!("Failed to parse input: {:?}", e))?;
+    let (_, machines) =
+        parse_input(input).map_err(|e| miette!("Failed to parse input: {:?}", e))?;
 
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
     let opt = Optimize::new(&ctx);
 
-    let p = z3::ast::Int::new_const(&ctx, "P");
     let p0 = z3::ast::Int::new_const(&ctx, "P0");
     let p1 = z3::ast::Int::new_const(&ctx, "P1");
 
@@ -86,19 +94,47 @@ pub fn process(input: &str) -> Result<String> {
     let mut total_tokens = 0;
 
     for machine in machines {
-        let ClawMachine { button_a, button_b, prize } = machine;
+        let ClawMachine {
+            button_a,
+            button_b,
+            prize,
+        } = machine;
         let (ax, ay) = (button_a.x as i64, button_a.y as i64);
         let (bx, by) = (button_b.x as i64, button_b.y as i64);
         let (px, py) = (prize.x + 10_000_000_000_000, prize.y + 10_000_000_000_000);
+        let value = p1.clone().mul(&z3::ast::Int::from_i64(&ctx, bx));
 
         opt.push();
-        opt.assert(&p0.mul(&z3::ast::Int::from_i64(&ctx, ax)).add(&[&p1.mul(&z3::ast::Int::from_i64(&ctx, bx))])._eq(&z3::ast::Int::from_i64(&ctx, px)));
-        opt.assert(&p0.mul(&z3::ast::Int::from_i64(&ctx, ay)).add(&[&p1.mul(&z3::ast::Int::from_i64(&ctx, by))])._eq(&z3::ast::Int::from_i64(&ctx, py)));
-        opt.minimize(&p0.mul(&z3::ast::Int::from_i64(&ctx, 3)).add(&[&p1]));
+        opt.assert(
+            &p0.clone()
+                .mul(&z3::ast::Int::from_i64(&ctx, ax))
+                .add(&value)
+                ._eq(&z3::ast::Int::from_i64(&ctx, px)),
+        );
+        opt.assert(
+            &p0.clone()
+                .mul(&z3::ast::Int::from_i64(&ctx, ay))
+                .add(&p1.clone().mul(&z3::ast::Int::from_i64(&ctx, by)))
+                ._eq(&z3::ast::Int::from_i64(&ctx, py)),
+        );
+        opt.minimize(
+            &p0.clone()
+                .mul(&z3::ast::Int::from_i64(&ctx, 3))
+                .add(&p1.clone()),
+        );
 
         if opt.check(&[]) == SatResult::Sat {
             let model = opt.get_model().unwrap();
-            let tokens = model.eval(&p0.mul(&z3::ast::Int::from_i64(&ctx, 3)).add(&[&p1]), true).unwrap().as_i64().unwrap();
+            let tokens = model
+                .eval(
+                    &p0.clone()
+                        .mul(&z3::ast::Int::from_i64(&ctx, 3))
+                        .add(&p1.clone()),
+                    true,
+                )
+                .unwrap()
+                .as_i64()
+                .unwrap();
             total_tokens += tokens;
         }
 
