@@ -1,5 +1,4 @@
 use glam::IVec2;
-use indicatif::ProgressIterator;
 use itertools::Itertools;
 use miette::*;
 use nom::{
