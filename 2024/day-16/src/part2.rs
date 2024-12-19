@@ -1,6 +1,5 @@
 use glam::IVec2;
 use miette::*;
-use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet, VecDeque};
 
 pub fn process(input: &str) -> Result<String> {
