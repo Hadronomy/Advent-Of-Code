@@ -3,17 +3,18 @@ use std::collections::{HashMap, HashSet};
 use miette::*;
 
 fn transform_secret(mut secret: i64) -> i64 {
-    let result = secret * 64;
+    let modulo_operand = 16777216;
+    let mut result = secret * 64;
     secret ^= result;
-    secret %= 16777216;
+    secret %= modulo_operand;
 
-    let result = secret / 32;
+    result = secret / 32;
     secret ^= result;
-    secret %= 16777216;
+    secret %= modulo_operand;
 
-    let result = secret * 2048;
+    result = secret * 2048;
     secret ^= result;
-    secret %= 16777216;
+    secret %= modulo_operand;
 
     secret
 }
