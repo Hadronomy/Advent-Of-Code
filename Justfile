@@ -11,8 +11,12 @@ fix:
 test year day:
     cargo nextest run -p aoc{{year}}-day-{{day}}
 
-run year day part:
-    cargo run -p aoc{{year}}-day-{{day}} --bin part{{part}} 
+run year day part *release:
+    @if [ "{{release}}" = "release" ]; then \
+        cargo run -p aoc{{year}}-day-{{day}} --bin part{{part}} --release; \
+    else \
+        cargo run -p aoc{{year}}-day-{{day}} --bin part{{part}}; \
+    fi
 
 bench year day:
     cargo bench -p aoc{{year}}-day-{{day}}
