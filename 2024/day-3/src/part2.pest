@@ -1,6 +1,6 @@
 WHITESPACE = _{ " " | "\t" | "\n" }
 
-input = { (do_instruction | dont_instruction | mul_instruction | text)* }
+input = _{ (do_instruction | dont_instruction | mul_instruction | text)* }
 
 do_instruction   = { "do()" }
 dont_instruction = { "don't()" }

@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use miette::*;
 use pest::Parser;
 use pest_derive::Parser;
@@ -9,40 +10,34 @@ struct Part2Parser;
 #[tracing::instrument]
 pub fn process(input: &str) -> Result<String> {
     let multiplications = parse(input)?;
-    let result = multiplications.iter().fold(0, |acc, (a, b)| acc + a * b);
+    let result: u32 = multiplications.iter().map(|(a, b)| a * b).sum();
     Ok(result.to_string())
 }
 
 type Multiplication = (u32, u32);
 
 fn parse(input: &str) -> Result<Vec<Multiplication>> {
-    let mut multiplications = Vec::new();
+    let pairs = Part2Parser::parse(Rule::input, input).into_diagnostic()?;
+
+    let mut multiplications = Vec::with_capacity(pairs.clone().count());
     let mut enabled = true;
 
-    let pairs = Part2Parser::parse(Rule::input, input).into_diagnostic()?;
     for pair in pairs {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::do_instruction => enabled = true,
-                Rule::dont_instruction => enabled = false,
-                Rule::mul_instruction if enabled => {
-                    let mut inner_pairs = inner_pair.into_inner();
-                    let a = inner_pairs
-                        .next()
-                        .unwrap()
-                        .as_str()
-                        .parse()
-                        .into_diagnostic()?;
-                    let b = inner_pairs
-                        .next()
-                        .unwrap()
-                        .as_str()
-                        .parse()
-                        .into_diagnostic()?;
-                    multiplications.push((a, b));
-                }
-                _ => {}
+        match pair.as_rule() {
+            Rule::do_instruction => enabled = true,
+            Rule::dont_instruction => enabled = false,
+            Rule::mul_instruction if enabled => {
+                let (a, b) = pair
+                    .into_inner()
+                    .map(|p| p.as_str().parse::<u32>().into_diagnostic())
+                    .collect::<Result<Vec<_>>>()?
+                    .into_iter()
+                    .take(2)
+                    .collect_tuple()
+                    .ok_or_else(|| miette!("Invalid multiplication instruction"))?;
+                multiplications.push((a, b));
             }
+            _ => continue,
         }
     }
 
